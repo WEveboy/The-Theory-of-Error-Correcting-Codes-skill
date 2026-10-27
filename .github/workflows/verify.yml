@@ -21,7 +21,9 @@ jobs:
       - run: python scripts/verify_project.py
   publish:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release: first edition')
+    if: >-
+      github.event_name == 'push' && github.ref == 'refs/heads/main' &&
+      startsWith(github.event.head_commit.message, 'release: first edition')
     runs-on: ubuntu-latest
     permissions:
       contents: write
