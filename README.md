@@ -21,3 +21,12 @@ Python3.10+，运行程序无第三方依赖。仓颉作者端另需PyYAML，DSH
 原书PDF和整章文本不随仓库分发。精确AI仅n≤6、二阶非线性度仅n≤4；新扩展通常n≤8。完整CCZ分类、未知变换搜索、新族自动证明和系统安全评估未实现。哈希一致不等于身份认证；重算重用现有数学程序，不是独立算法证明。
 
 后续维护必须阅读[上传与发布流程](docs/UPLOAD_WORKFLOW.md)，并更新[日志](CHANGELOG.md)。
+
+## 贡献者
+
+| 贡献者 | 贡献说明 |
+| --- | --- |
+| [WEveboy](https://github.com/WEveboy) | 项目发起、研究目标与需求确定、维护和发布决策。 |
+| **Codex（OpenAI AI 编程助手）** | 协助研究内容技能化整理、Python 工具与验证、Codex／DeepSeek Harness 适配、LaTeX／PDF 教程，以及 GitHub CI 与发行发布。 |
+
+Codex 以 AI 辅助贡献者身份署名，用于如实记录本项目中的协作工作。
