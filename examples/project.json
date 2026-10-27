@@ -1,0 +1,11 @@
+{
+  "construction": {
+    "kind": "gold",
+    "params": {
+      "n": 3,
+      "k": 1,
+      "polynomial": 11
+    }
+  },
+  "sbox": true
+}

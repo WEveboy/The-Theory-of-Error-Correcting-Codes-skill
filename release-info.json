@@ -1,0 +1,13 @@
+{
+  "project": "Boolean Vector Research Skills",
+  "display_name": "布尔函数与向量值函数科研技能·第一版",
+  "public_version": "1.0.0",
+  "edition": 1,
+  "frozen_baseline": "0.2.2",
+  "mathematical_runtime_version": "0.2.0",
+  "workflow_runtime_version": "0.2.2",
+  "capabilities": 16,
+  "runtime_programs": 8,
+  "baseline_tests": 107,
+  "baseline_cli_cases": 54
+}

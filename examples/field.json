@@ -1,0 +1,10 @@
+{
+  "n": 3,
+  "polynomial": 11,
+  "terms": [
+    {
+      "coefficient": 1,
+      "exponent": 3
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+build/
+dist/
+.venv/
+__pycache__/
+*.pyc
+*.aux
+*.log
+*.toc
+*.out
+*.synctex.gz
+.env
+.env.*

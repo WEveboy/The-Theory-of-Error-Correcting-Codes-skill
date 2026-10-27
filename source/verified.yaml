@@ -1,0 +1,728 @@
+schema_version: 1
+bundle_id: bundle.boolean-vector-research
+book:
+  title: 布尔函数与向量值函数科研工具（MacWilliams基础与独立扩展）
+  author: MacWilliams & Sloane；扩展来源另标
+  source_pack: boolean-vector-cangjie
+  baseline_tag: research-0.2.2
+entry:
+  name: boolean-vector-research
+  description: 布尔函数与向量值函数科研：Walsh/RM、bent/APN、有限域迹构造、DDT/BCT/DLCT、AI、函数生成码、EA/CCZ给定证书、设计与序列，以及带哈希的可复算实验。用于设计和分析有限候选及核对证明条件；不替代完整分类、通用译码或系统安全评估。
+  core_principles:
+  - 先读resources/usage.md确认当前命令与限制；所有计算记录n,m、位序、域模型和预算。
+  - 分离B原书、D独立推导、E外部理论、H研究假设；证明、有限全算、采样和未定分别报告。
+  - 向量性质检查全部非零分量；函数与码的距离关系先过满秩门；bent、平衡和置换的条件分别核对。
+  - 执行前读取能力卡；跨域任务按阶段依次加载所需卡，每阶段最多两张，逐项输出证书与失败见证。
+  - 扩展研究优先查resources/research_map.md；完整CCZ分类、一般高阶精确距离、LP界和新族证明不得伪报已完成。
+  - 使用Python3.10+标准库工具；资源相对SKILL目录定位。结果写用户工作目录，不写已安装技能目录。
+  out_of_scope:
+  - 通用BCH/RS译码工程、任意PDF自动蒸馏和与函数科研无关的请求。
+  - 自动证明新颖性、无条件宣称安全或实现完整CCZ分类。
+  stop_conditions:
+  - 缺n/m/位序/域模型时询问或明确仅用已有真值表，不能猜关键条件。
+  - 超预算、来源不足或定理前提不满足时说明未算/未证；继续可执行的独立部分。
+  - 禁止将p.430习题20印刷推广式当有效构造；使用卡内有证明的同侧变量版本。
+router_entry:
+  name: boolean-vector-research-router
+  description: 布尔函数与向量值函数科研：Walsh/RM、bent/APN、有限域迹构造、DDT/BCT/DLCT、AI、函数生成码、EA/CCZ给定证书、设计与序列，以及带哈希的可复算实验。用于设计和分析有限候选及核对证明条件；不替代完整分类、通用译码或系统安全评估。
+promotion_budget: 2
+capabilities:
+- capability_id: cap.boolean-vector.representation
+  revision: 2
+  status: active
+  slug: representation
+  title: 表示、规格与条件检查
+  importance: critical
+  importance_rationale: T01/T02：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 先固定n、m、N=2^n及位序，才讨论谱和次数。
+  intents:
+  - 表示、规格与条件检查
+  - 真值表、ANF、域表示转换、位序混淆、specification
+  keywords:
+  - representation
+  - 表示、规格与条件检查
+  also_read: []
+  card: cards/representation.md
+  frontmatter:
+    description: 真值表、ANF、域表示转换、位序混淆、specification。只需谱时后续读scalar-spectrum；域表达式尚未生成真值表时先说明模型。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：13章 pp.370–375（PDF393–398），平方自由展开与RM单项式基；4章 pp.115–119，迹与对偶基。
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.scalar-spectrum
+  revision: 2
+  status: active
+  slug: scalar-spectrum
+  title: 标量谱、非线性度与RM陪集
+  importance: critical
+  importance_rationale: T03：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: W_f(a)=Σ_x(−1)^(f(x)+a·x)。
+  intents:
+  - 标量谱、非线性度与RM陪集
+  - Walsh spectrum、非线性度、最近仿射函数、RM coset
+  keywords:
+  - scalar-spectrum
+  - 标量谱、非线性度与RM陪集
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/scalar-spectrum.md
+  frontmatter:
+    description: Walsh spectrum、非线性度、最近仿射函数、RM coset。高阶NL转advanced-invariants；向量输出转vector-metrics。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：14章 pp.413–418，定理1、Parseval及最近一阶RM码字；13章 p.373。
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.quadratic-rank
+  revision: 2
+  status: active
+  slug: quadratic-rank
+  title: 二次型、极化秩与导数核
+  importance: critical
+  importance_rationale: T05：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 仅次数≤2时极化B_f(x,y)=f(x+y)+f(x)+f(y)+f(0)是交错双线性型。
+  intents:
+  - 二次型、极化秩与导数核
+  - quadratic rank、二次型、根空间、秩分布、二次函数族
+  keywords:
+  - quadratic-rank
+  - 二次型、极化秩与导数核
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/quadratic-rank.md
+  frontmatter:
+    description: quadratic rank、二次型、根空间、秩分布、二次函数族。一般向量指标读vector-metrics；高次数不套此公式。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：15章 pp.434–442，定理1、Dickson标准形、定理5。D：由标准形得到非零谱幅与数量。
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.bent-construction
+  revision: 2
+  status: active
+  slug: bent-construction
+  title: 带证明的bent构造
+  importance: critical
+  importance_rationale: T04：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 偶维n=2k。
+  intents:
+  - 带证明的bent构造
+  - construct bent、MM/Maiorana–McFarland、二次bent、bent对偶、直接和
+  keywords:
+  - bent-construction
+  - 带证明的bent构造
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/bent-construction.md
+  frontmatter:
+    description: construct bent、MM/Maiorana–McFarland、二次bent、bent对偶、直接和。APN/置换研究读trace-power-search。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：14章 pp.426–430，定理6、10、12。D：可逆置换推广的字符求和证明。p.430习题20的印刷式隔离。
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.vector-metrics
+  revision: 2
+  status: active
+  slug: vector-metrics
+  title: 全分量谱、差分与向量函数设计
+  importance: critical
+  importance_rationale: T03/T05+E：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 所有非零b的分量b·F都要检查。
+  intents:
+  - 全分量谱、差分与向量函数设计
+  - S-box、APN、vectorial Boolean function、全分量谱、DDT、置换性
+  keywords:
+  - vector-metrics
+  - 全分量谱、差分与向量函数设计
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/vector-metrics.md
+  frontmatter:
+    description: S-box、APN、vectorial Boolean function、全分量谱、DDT、置换性。符号族证明先读trace-power-search；只有坐标表现不能验收。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: E：Carlet作者章节chap-vectorial-fcts-corr.pdf，分量、非线性度、差分与bent的相关定义。B/D：第3章pp.81、86–88的图像校验和立方差分桥梁。
+  - source_id: carlet-author-chapters
+    location: 现代定义单独标E；实际核读范围见proof_ledger.md
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.function-code
+  revision: 2
+  status: active
+  slug: function-code
+  title: 函数生成码、秩门与重量分布
+  importance: critical
+  importance_rationale: T07+ D/E：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: C_F由1、输入坐标和输出坐标生成，长度N。
+  intents:
+  - 函数生成码、秩门与重量分布
+  - function-code bridge、少重量码、生成矩阵、rank degeneracy
+  keywords:
+  - function-code
+  - 函数生成码、秩门与重量分布
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/function-code.md
+  frontmatter:
+    description: function-code bridge、少重量码、生成矩阵、rank degeneracy。由分布求对偶读enumerators-bounds；设计应用读design-oa。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：1章线性码/对偶、5章pp.125–129；D/E：在RM(1,n)上添加输出分量的完整长度码。
+  - source_id: carlet-author-chapters
+    location: 现代定义单独标E；实际核读范围见proof_ledger.md
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.advanced-invariants
+  revision: 2
+  status: active
+  slug: advanced-invariants
+  title: 自相关、韧性、代数免疫与高阶距离
+  importance: high
+  importance_rationale: T01/T03+E：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 自相关AC(u)=Σ_x(−1)^(f(x)+f(x+u))是W²的逆变换。
+  intents:
+  - 自相关、韧性、代数免疫与高阶距离
+  - autocorrelation、相关免疫、resilience、algebraic immunity、higher-order nonlinearity
+  keywords:
+  - advanced-invariants
+  - 自相关、韧性、代数免疫与高阶距离
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/advanced-invariants.md
+  frontmatter:
+    description: autocorrelation、相关免疫、resilience、algebraic immunity、higher-order nonlinearity。仅请求一般NL读scalar-spectrum。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：14章字符变换与导数；13章RM阶数。E：Carlet chap-fcts-Bool-corr.pdf，§4.1.3的CI/韧性及代数免疫章节。
+  - source_id: carlet-author-chapters
+    location: 现代定义单独标E；实际核读范围见proof_ledger.md
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.trace-power-search
+  revision: 2
+  status: active
+  slug: trace-power-search
+  title: 迹、幂函数与可证候选搜索
+  importance: high
+  importance_rationale: T02/T08+ D/E：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 固定域模型再生成x^(2^k+1)，差分的线性部分可归约为a x^(2^k)+a^(2^k)x。
+  intents:
+  - 迹、幂函数与可证候选搜索
+  - Gold functions、trace polynomial、幂函数、构造搜索、APN设计
+  keywords:
+  - trace-power-search
+  - 迹、幂函数与可证候选搜索
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/trace-power-search.md
+  frontmatter:
+    description: Gold functions、trace polynomial、幂函数、构造搜索、APN设计。全指标读vector-metrics，分类证书读ea-certificate。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：3章p.86、4章pp.115–119、8章pp.239–240。D：Gold差分线性化与有限枚举工作流。
+  resources:
+  - resources/research_core.py
+  - resources/test_research_core.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  - resources/search_monomials.py
+  - resources/research_extensions.py
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.ea-certificate
+  revision: 2
+  status: active
+  slug: ea-certificate
+  title: EA变换、等价证书与分类预筛
+  importance: high
+  importance_rationale: T12+E/D：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 先选等价关系。
+  intents:
+  - EA变换、等价证书与分类预筛
+  - EA-equivalence、equivalence certificate、函数去重、分类预筛、CCZ
+  keywords:
+  - ea-certificate
+  - EA变换、等价证书与分类预筛
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/ea-certificate.md
+  frontmatter:
+    description: EA-equivalence、equivalence certificate、函数去重、分类预筛、CCZ。仅算谱读vector-metrics；完整CCZ自动分类不在当前工具内。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：14章p.417的仿射变换及同分布不保证等价。E：Carlet向量章节的EA/CCZ关系；D：逐点验证给定EA证书。
+  - source_id: carlet-author-chapters
+    location: 现代定义单独标E；实际核读范围见proof_ledger.md
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.enumerators-bounds
+  revision: 2
+  status: active
+  slug: enumerators-bounds
+  title: 重量枚举器、对偶变换与界的研究入口
+  importance: high
+  importance_rationale: T07/T09：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 二元线性码A_j的对偶候选系数为|C|⁻¹Σ_i A_i K_j(i)。
+  intents:
+  - 重量枚举器、对偶变换与界的研究入口
+  - MacWilliams、weight enumerator、few-weight codes、Krawtchouk、LP bounds
+  keywords:
+  - enumerators-bounds
+  - 重量枚举器、对偶变换与界的研究入口
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/enumerators-bounds.md
+  frontmatter:
+    description: MacWilliams、weight enumerator、few-weight codes、Krawtchouk、LP bounds。实际生成码先读function-code；LP求解需另外准备正确模型。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：5章pp.126–129的MacWilliams恒等式；17章pp.535–539及21章pp.666–668的非负变换与界机制。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.design-oa
+  revision: 2
+  status: active
+  slug: design-oa
+  title: 支持集设计与正交阵的精确检查
+  importance: high
+  importance_rationale: T10：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: t-(v,k,λ)简单设计要求所有块大小k且每个t子集恰出现λ次。
+  intents:
+  - 支持集设计与正交阵的精确检查
+  - t-design、orthogonal array、支持集、均匀投影、码与秘密共享
+  keywords:
+  - design-oa
+  - 支持集设计与正交阵的精确检查
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/design-oa.md
+  frontmatter:
+    description: t-design、orthogonal array、支持集、均匀投影、码与秘密共享。由码推出设计的定理条件需单独读；具体密码方案不自动推定。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：6章设计条件框架；21章pp.670–671定理15/16。D：直接枚举子集/投影检查给定有限对象。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.sequence-correlation
+  revision: 2
+  status: active
+  slug: sequence-correlation
+  title: 周期序列与异或相关分析
+  importance: high
+  importance_rationale: T08/T11+ D：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 周期相关用索引x+τ modN，布尔加法相关用x XOR u。
+  intents:
+  - 周期序列与异或相关分析
+  - sequence correlation、迹序列、低相关序列族、periodic autocorrelation、XOR相关
+  keywords:
+  - sequence-correlation
+  - 周期序列与异或相关分析
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/sequence-correlation.md
+  frontmatter:
+    description: sequence correlation、迹序列、低相关序列族、periodic autocorrelation、XOR相关。函数导数读advanced-invariants。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977
+    location: B：3章pp.88–89移位寄存器，7章循环作用；14章Hadamard和导数。D：按明确群作用的有限相关求和。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.finite-field-functions
+  revision: 2
+  status: active
+  slug: finite-field-functions
+  title: 有限域多项式、绝对迹与对偶基
+  importance: high
+  importance_rationale: B4+D：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 先验证模多项式不可约。
+  intents:
+  - 有限域多项式、绝对迹与对偶基
+  - trace polynomial、绝对迹、多项式构造、dual basis、有限域表示
+  keywords:
+  - finite-field-functions
+  - 有限域多项式、绝对迹与对偶基
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/finite-field-functions.md
+  frontmatter:
+    description: trace polynomial、绝对迹、多项式构造、dual basis、有限域表示。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: macwilliams-1977-and-independent-implementation
+    location: B：第4章pp.115–119的迹配对和对偶基。D：固定多项式基的逐点计算；不是原书自动生成的算法。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  - resources/research_core.py
+  - resources/field_functions.py
+  - resources/sbox_criteria.py
+  - resources/graph_equivalence.py
+  - resources/research_workflow.py
+  - resources/test_field_functions.py
+  - resources/test_new_research.py
+  - resources/test_research_workflow.py
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.sbox-criteria
+  revision: 2
+  status: active
+  slug: sbox-criteria
+  title: BCT、DLCT与传播准则
+  importance: high
+  importance_rationale: E+D：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 经典BCT需要方形置换。
+  intents:
+  - BCT、DLCT与传播准则
+  - boomerang、BCT、DLCT、差分线性表、SAC、PC传播准则
+  keywords:
+  - sbox-criteria
+  - BCT、DLCT与传播准则
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/sbox-criteria.md
+  frontmatter:
+    description: boomerang、BCT、DLCT、差分线性表、SAC、PC传播准则。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: independent-research-extension
+    location: E：Cid等2018 BCT；Bar-On等2019 DLCT；来源链接和定义见proof_ledger.md。D：直接计数与独立恒等式核验。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  - resources/research_core.py
+  - resources/field_functions.py
+  - resources/sbox_criteria.py
+  - resources/graph_equivalence.py
+  - resources/research_workflow.py
+  - resources/test_field_functions.py
+  - resources/test_new_research.py
+  - resources/test_research_workflow.py
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.graph-ccz-certificates
+  revision: 2
+  status: active
+  slug: graph-ccz-certificates
+  title: CCZ图仿射证书与不变量预筛
+  importance: high
+  importance_rationale: E+D：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 用z=x|(F(x)<<n)编码图；给定可逆L与平移c，检验Lz+c的低n位是否一一覆盖输入，再恢复变换后的函数表。
+  intents:
+  - CCZ图仿射证书与不变量预筛
+  - CCZ certificate、图仿射、逆函数关系、等价预筛
+  keywords:
+  - graph-ccz-certificates
+  - CCZ图仿射证书与不变量预筛
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/graph-ccz-certificates.md
+  frontmatter:
+    description: CCZ certificate、图仿射、逆函数关系、等价预筛。EA证书使用ea-certificate卡。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: independent-research-extension
+    location: E：Carlet作者向量函数章节§3.1.5的图仿射等价。D：对给定矩阵逐点验证及完整图字符谱/差分直方图检查。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  - resources/research_core.py
+  - resources/field_functions.py
+  - resources/sbox_criteria.py
+  - resources/graph_equivalence.py
+  - resources/research_workflow.py
+  - resources/test_field_functions.py
+  - resources/test_new_research.py
+  - resources/test_research_workflow.py
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。
+- capability_id: cap.boolean-vector.research-workflow
+  revision: 4
+  status: active
+  slug: research-workflow
+  title: 可复算构造与实验归档
+  importance: high
+  importance_rationale: D：用户明确要求支持函数设计及科研，减少条件遗漏并给可检查结果。
+  one_liner: 一个实验必须保存生成参数、完整函数表、计算结果、阶段日志、运行环境和程序指纹。
+  intents:
+  - 可复算构造与实验归档
+  - 完整实验、批次候选记录、构造到指标、reproducible experiment
+  keywords:
+  - research-workflow
+  - 可复算构造与实验归档
+  also_read:
+  - cap.boolean-vector.representation
+  card: cards/research-workflow.md
+  frontmatter:
+    description: 完整实验、批次候选记录、构造到指标、reproducible experiment。
+    tags:
+    - boolean-functions
+    - research
+  source_evidence:
+  - source_id: independent-research-extension
+    location: D：把已经验证的有限构造、核心分析和S-box计算组合为可追溯科研流程；不是原书定理。
+  resources:
+  - resources/research_extensions.py
+  - resources/test_research_extensions.py
+  - resources/usage.md
+  - resources/research_map.md
+  - resources/proof_ledger.md
+  - resources/examples.json
+  - resources/research_core.py
+  - resources/field_functions.py
+  - resources/sbox_criteria.py
+  - resources/graph_equivalence.py
+  - resources/research_workflow.py
+  - resources/test_field_functions.py
+  - resources/test_new_research.py
+  - resources/test_research_workflow.py
+  - resources/experiment_audit.py
+  - resources/test_experiment_audit.py
+  promotion:
+    destination: router
+    gate:
+      independent_intent: true
+      independent_contract: true
+      independent_run: false
+      independent_reuse: true
+      independent_eval: true
+    notes: 共用表示/核验资源；single入口内按意图路由，不创建重复可发现入口。

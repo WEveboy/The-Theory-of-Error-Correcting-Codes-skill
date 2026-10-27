@@ -1,0 +1,287 @@
+\documentclass[UTF8,fontset=fandol,zihao=-4]{ctexrep}
+\usepackage[a4paper,margin=22mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,booktabs,longtable,array,xcolor,enumitem,fancyhdr,fvextra}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!60!black]{hyperref}
+\usepackage{xurl}\emergencystretch=3em\sloppy
+\definecolor{ink}{HTML}{173B60}
+\setlength{\parindent}{2em}\setlength{\parskip}{4pt}
+\setlist{itemsep=3pt,topsep=5pt}
+\DefineVerbatimEnvironment{code}{Verbatim}{breaklines=true,breakanywhere=true,fontsize=\small,frame=single,rulecolor=\color{gray!45},framesep=6pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{Boolean Vector Research Skills · 第一版}
+\fancyhead[R]{Codex}\fancyfoot[C]{\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+\hypersetup{pdftitle={布尔函数与向量值函数科研技能第一版：Codex安装到科研复现},pdfauthor={WEveboy}}
+\begin{document}
+\begin{titlepage}\centering\vspace*{18mm}
+{\Huge\bfseries\color{ink}布尔函数与向量值函数\\科研技能·第一版\par}
+\vspace{12mm}{\LARGE Codex 安装与使用教程\par}
+\vspace{8mm}{\Large 从安装仓颉到科研复现\par}
+\vspace{14mm}{\large 公开版本：V1 / 1.0.0\\冻结开发基线：0.2.2\\2026年10月27日\par}
+\vfill\begin{minipage}{0.86\textwidth}
+\textbf{完成本教程后，你应能：}安装仓颉和科研Skill，构造一个有已知答案的函数，计算全分量指标，保存完整实验与日志，核对哈希并重算结果。教程给出可复制命令、预期结果和常见故障处理。
+
+本项目不是原书PDF副本。第一版保留16张能力卡和8个标准库运行程序；内部数学程序版本仍为0.2.0，工作流为0.2.2，公开发行名称为1.0.0，三者含义不同。
+\end{minipage}\vspace*{10mm}
+\end{titlepage}
+\tableofcontents\clearpage
+
+\chapter{第一步：安装仓颉 cangjie-skill}
+\section{先确认名称和准备环境}
+仓颉官方仓库为\url{https://github.com/kangarooking/cangjie-skill}，实际拼写是\texttt{cangjie-skill}。本教程的第一件事是安装它；随后再安装已经蒸馏好的科研Skill。仓颉负责“把材料变成技能”，科研Skill负责“用技能做研究”，两者分别安装。
+
+准备可用的Codex和Python 3.10或更高版本。Windows中按Win键，搜索PowerShell并打开，输入：
+\begin{code}
+py -3 --version
+\end{code}
+若没有\texttt{py}，试\texttt{python --version}；后续命令中的\texttt{py -3}均可替换为这个解释器。都找不到时从\url{https://www.python.org/downloads/}安装Python并启用添加到PATH，然后重新打开PowerShell。不要把\texttt{>>>}交互提示符窗口当成PowerShell。
+
+\section{推荐方法：让Codex安装仓颉}
+在Codex新任务中发送下列完整文字：
+\begin{quote}
+使用skill-installer安装GitHub仓库kangarooking/cangjie-skill根目录的cangjie-skill。保留完整资源目录；安装后告诉我实际路径，并检查SKILL.md是否存在。若已安装先核对现有版本，不直接覆盖我的修改。
+\end{quote}
+安装工具通常使用Codex的用户级技能目录。当前官方文档使用\texttt{\~{}/.agents/skills}；本项目此前使用的桌面环境已有\texttt{\~{}/.codex/skills}。已有版本可沿用原位置，避免同名技能在两个目录重复出现。具体发现位置以当前宿主版本和实际安装输出为准。依据：\url{https://learn.chatgpt.com/docs/build-skills}。
+
+\section{手工安装方法}
+在仓颉Release页下载刷新版\texttt{cangjie-skill-2.5.0.zip}及同名\texttt{.sha256}。下载链接为：
+\begin{code}
+https://github.com/kangarooking/cangjie-skill/releases/download/v2.5.0/cangjie-skill-2.5.0.zip
+https://github.com/kangarooking/cangjie-skill/releases/download/v2.5.0/cangjie-skill-2.5.0.zip.sha256
+\end{code}
+在下载目录执行\texttt{Get-FileHash .\textbackslash cangjie-skill-2.5.0.zip -Algorithm SHA256}，与校验文本比较，忽略字母大小写。解压后找到直接包含\texttt{SKILL.md}的\texttt{cangjie-skill}目录，将整个目录复制到实际技能根目录，不只复制一个文件，不多套一层目录。上游2.5.0有刷新包，自动生成的源码归档不一定等同刷新后的发行包。
+
+\section{安装作者端依赖并验收}
+在PowerShell中把\texttt{\$cj}改成刚才的实际目录：
+\begin{code}
+$cj = Join-Path $env:USERPROFILE ".agents\skills\cangjie-skill"
+py -3 -m venv "$cj\.venv"
+& "$cj\.venv\Scripts\python.exe" -m pip install pyyaml
+& "$cj\.venv\Scripts\python.exe" "$cj\scripts\cangjie.py" doctor
+\end{code}
+如果安装在旧目录，第一行改为\texttt{.codex\textbackslash skills\textbackslash cangjie-skill}。虚拟环境仅服务仓颉作者工具，不是科研计算的必需依赖。doctor应能启动并报告环境；按实际诊断补齐依赖，不把没有运行的检查写成“通过”。
+
+回到新任务发送“使用cangjie-skill，先检查我给出的材料路径、作者和研究目标，再提出蒸馏计划”。缺少原书时必须先提供自己可合法访问的PDF；本项目不含原书，不需要为使用现成Skill重新蒸馏一次。
+
+\chapter{第二步：取得第一版并安装到Codex}
+\section{下载对应安装版}
+打开项目Release页：\url{https://github.com/WEveboy/The-Theory-of-Error-Correcting-Codes-skill/releases/tag/edition-v1.0.0}。下载\texttt{boolean-vector-research-Codex-1.0.0.zip}与\texttt{SHA256SUMS.txt}。为避免文件名被浏览器加上“(1)”，建议新建专用目录\texttt{C:\textbackslash SkillLab\textbackslash downloads}。
+\begin{code}
+Set-Location C:\SkillLab\downloads
+Get-FileHash .\boolean-vector-research-Codex-1.0.0.zip -Algorithm SHA256
+\end{code}
+在SHA256SUMS中找到同名文件，比较64位哈希。解压到\texttt{C:\textbackslash SkillLab\textbackslash codex}，应直接看见\texttt{install\_codex.py}和\texttt{boolean-vector-research}文件夹。
+
+\section{运行防覆盖安装器}
+\begin{code}
+Set-Location C:\SkillLab\codex
+py -3 .\install_codex.py
+\end{code}
+新安装默认使用用户\texttt{.agents/skills}；若检测到用户旧\texttt{.codex/skills}中已有本技能，则沿用原位置。目录已存在时默认拒绝覆盖，这不是安装失败。确认要升级并备份时运行：
+\begin{code}
+py -3 .\install_codex.py --replace
+\end{code}
+安装器先复制旧目录到带时间戳的同级备份，再写入第一版文件，核对发行清单中的SHA256。它不会删除备份，也不会删除未列入本版的用户附加文件。自定义目录用\texttt{--destination}指定“技能根目录”，不是技能本身目录：
+\begin{code}
+py -3 .\install_codex.py --destination C:\SkillLab\my-skills
+\end{code}
+该自定义路径不会自动成为Codex发现位置，只适合测试或已手动配置的环境。源代码检出安装使用\texttt{py -3 scripts/install\_codex.py}，而安装ZIP使用根目录的\texttt{install\_codex.py}。
+
+\section{看安装结果，不凭目录存在下结论}
+成功输出应含\texttt{installed\_and\_verified}、\texttt{public\_version=1.0.0}和\texttt{target}。复制这个target路径，后续用来定位resources。技能目录应直接含\texttt{SKILL.md}、\texttt{EDITION.json}、\texttt{resources}与\texttt{references}。重新加载或开始新任务后调用；若未自动发现，明确要求Codex读取安装目录的SKILL.md，并区分“文件已安装”和“宿主自动发现已验证”。
+
+\chapter{第三步：第一次对话计算}
+在Codex任务中发送：
+\begin{quote}
+\texttt{\$boolean-vector-research} 构造4变量二次bent函数，计算全部Walsh谱、非线性度、极化秩和函数生成码重量分布。给出条件、输入表、完整结果文件和失败见证；结果保存在当前工作目录。
+\end{quote}
+基准函数为$f=x_0x_1+x_2x_3$，应有NL为6、最大绝对Walsh值为4、极化秩为4；包含常数和输入坐标的生成码秩为6、最小非零重量为6。标量bent不平衡，不应再要求这个函数同时平衡。
+
+\section{设置后续命令的资源路径}
+以下示例使用新用户目录；实际位置不同则替换为安装器打印的target：
+\begin{code}
+$skill = Join-Path $env:USERPROFILE ".agents\skills\boolean-vector-research"
+$res = Join-Path $skill "resources"
+New-Item -ItemType Directory -Force C:\SkillLab\work | Out-Null
+Set-Location C:\SkillLab\work
+py -3 "$res\research_core.py" demo --case scalar-bent --out bent.json
+\end{code}
+确认工作目录中出现bent.json，并检查输出状态和数值。资源目录只用于读程序，结果不要写入安装目录。
+
+\chapter{从一个JSON开始理解输入合同}
+\section{整数表怎样表示函数}
+对$F:\mathbb F_2^n\to\mathbb F_2^m$，table[x]表示$F(x)$的整数编码；输入整数的第$i$位是$x_i$，输出第$i$位是$F_i$。当前支持$1\le m\le n$。例如：
+\begin{code}
+{"n":2,"m":1,"table":[0,0,0,1]}
+\end{code}
+这是$x_0x_1$。长度必须等于$2^n$，输出必须在$0$到$2^m-1$之间。JSON的true/false和浮点不能冒充整数；JSON用英文双引号，不带尾逗号。文件名要确实以.json结尾，避免隐藏的.txt后缀。
+
+\section{域模型、谱和计数不能混淆}
+有限域整数是多项式基下的编码。模多项式11表示$x^3+x+1$；域表示改变后，列表不一定保持相同。Walsh使用未归一化整数和；DDT按所有有序输入$x$计数；DLCT使用计数偏差$\#\mathrm{equal}-2^{n-1}=AC/2$，再除$2^n$才是概率偏差。
+
+向量性质必须检查所有非零输出掩码$b$的分量$b\cdot F$，不能只检查坐标。经典BCT只对方形置换计算；非置换返回not\_applicable。相同谱/DDT不变量不能证明CCZ等价。
+
+\chapter{完整实验：GF(8)立方函数}
+\section{保存项目文件}
+先完成本平台章节中的\texttt{\$res}设置，在独立工作目录保存project.json：
+\begin{code}
+{
+  "construction": {
+    "kind": "gold",
+    "params": {"n": 3, "k": 1, "polynomial": 11}
+  },
+  "advanced": true,
+  "sbox": true
+}
+\end{code}
+可在PowerShell用单引号here-string保存，或用文本编辑器另存为UTF-8。然后运行：
+\begin{code}
+py -3 "$res\research_workflow.py" --input .\project.json --out-dir .\experiment-001
+\end{code}
+输出目录必须不存在。已有experiment-001时改用experiment-002，保留旧实验作比较。
+
+\section{核对预期结果}
+本例$F(x)=x^3$在GF(8)上是置换，NL=2、差分均匀性$\delta=2$、boomerang均匀性为2。它不是bent。小维数值是已知基准，不能据此宣布新族或当前最优。
+
+目录应包含project.json、function.json、analysis.json、sbox.json、summary.md、environment.json、execution.jsonl和manifest.json。function保存完整表；analysis保存全分量结果；sbox保存BCT/DLCT和传播检查；其余记录输入、环境和执行证据。
+
+\section{只算核心指标或自行给表}
+\begin{code}
+py -3 "$res\research_core.py" analyze --input function.json --out core.json
+py -3 "$res\sbox_criteria.py" analyze --input function.json --out sbox-full.json --include-tables
+\end{code}
+--advanced才请求精确AI和二阶非线性度：AI仅$n\le6$，精确二阶NL仅$n\le4$；超维字段为not\_computed，不能把它写成0。新扩展通常$n\le8$，核心默认$n\le8$，允许显式放宽但仍受谱条目与工作预算限制。
+
+\chapter{日志、哈希与重算：怎样验收结果}
+\section{先看完成清单，再核对哈希}
+manifest最后写入；只看目录存在不够。先检查status为complete，再核对files里的SHA256。推荐直接运行只读审计器：
+\begin{code}
+py -3 "$res\experiment_audit.py" --directory .\experiment-001 --out .\audit-001.json
+py -3 "$res\experiment_audit.py" --directory .\experiment-001 --recompute --out .\replay-001.json
+\end{code}
+报告必须是实验目录外的新文件；程序不会覆盖旧报告。支持0.2.0、0.2.1、0.2.2历史实验。第一版沿用0.2.2工作流版本，EDITION.json另记公开版本1.0.0。
+
+\begin{longtable}{p{40mm}p{105mm}}
+\toprule 状态 & 应如何解释\\\midrule\endhead
+hash\_consistent & 文件与当前无签名清单一致；不是记录者身份或数值真实性的认证。\\
+recomputed\_match & 按原参数使用当前程序重新生成数学结果后匹配。重算重用同一程序，不是独立算法证明。\\
+hash\_mismatch & 文件字节与清单哈希不同，停止重算并检查来源。\\
+content\_mismatch & 输入关联、日志协议或重算结果不一致；查看failures及witness.pointer。\\
+退出码2 & 缺文件、损坏JSON、重复键、非有限数、非法时间/路径、环境合同或预算错误。\\\bottomrule
+\end{longtable}
+退出码0表示通过，1表示检测到哈希或内容差异。PowerShell运行后用\texttt{\$LASTEXITCODE}查看退出码，不只看终端有没有红字。
+
+\section{阶段日志究竟检查什么}
+execution.jsonl每行一条事件，包含整数sequence、显式UTC时间、elapsed\_seconds、stage和status。审计器检查阶段是否与启用/跳过S-box的项目配置一致、序号是否连续、耗时是否为有限非负且不倒退的数。墙上时钟可能校正，不能把它代替单调耗时。
+
+environment.json记录Python、平台和运行程序SHA256。runtime\_fingerprints\_match独立报告代码指纹是否相同；版本改变不自动等于数学结果错误。重算发现不同会给首个JSON指针，例如/nonlinearity，或/components/0/walsh/3，并给差异类型和限长预览。
+
+\section{失败命令也保存日志}
+数学计算失败时工作流不创建成功实验目录；需要额外保存终端输出：
+\begin{code}
+py -3 "$res\research_workflow.py" --input project.json --out-dir experiment-002 2>&1 | Tee-Object -FilePath command-002.log
+$LASTEXITCODE
+\end{code}
+先选择不存在的日志名，避免手工命令覆盖旧记录。成功实验内部阶段日志和失败命令输出是不同证据。不要把未计算、未调用或未完成的项写入“已通过”。
+
+\chapter{进一步使用：迹构造、等价证书与编码桥梁}
+\section{绝对迹和多项式构造}
+保存field.json：
+\begin{code}
+{"n":3,"polynomial":11,"terms":[{"coefficient":1,"exponent":3}]}
+\end{code}
+\begin{code}
+py -3 "$res\field_functions.py" trace --input field.json --out trace.json
+py -3 "$res\research_core.py" analyze --input trace.json --out trace-analysis.json
+\end{code}
+将trace改成polynomial得到向量值多项式表；dual-basis使用n、polynomial和可选basis，给迹配对矩阵、对偶基和坐标恢复。指数0是常数项，采用$0^0=1$的多项式约定，不对指数盲目模$2^n-1$。构造表始终按标准多项式基索引。
+
+\section{给定CCZ图变换证书}
+保存certificate.json，交换输入输出的简单基准：
+\begin{code}
+{"n":2,"m":2,"table":[0,1,2,3],"graph_rows":[4,8,1,2],"graph_shift":0,"target":[0,1,2,3]}
+\end{code}
+\begin{code}
+py -3 "$res\graph_equivalence.py" certificate --input certificate.json --out certificate-result.json
+\end{code}
+图编码为$z=x\,|\,(F(x)\ll n)$，矩阵行是位掩码，低$n$位为新输入。矩阵必须可逆；投影碰撞会返回not\_function\_graph与见证。给了target还要查看matches\_target。该程序不搜索未知CCZ变换，也不做完整分类。
+
+prefilter输入n、m、left和right两张表。完整图谱/DDT直方图不同可以否定CCZ；相同仅inconclusive。次数、BCT和DLCT不作为本工具承诺的CCZ不变量。
+
+\section{函数生成码的科研用法}
+工具用常数、输入坐标和输出坐标生成$C_F$。只有实际秩为$n+m+1$，才满足本工具用最小非零重量联系NL的满秩前提；不能把提供的行数当秩。码枚举还有rank和长度预算。先核对generated\_code.full\_rank\_bridge\_applicable，再解释距离和重量分布，最后按明确条件连接对偶枚举器、设计或OA。
+
+\chapter{第一版16张能力卡：何时调用}
+\small\begin{longtable}{p{37mm}p{108mm}}
+\toprule 能力 & 合适任务与输出\\\midrule\endhead
+表示与规格 & 位序、真值表、ANF、域模型、维数与预算检查。\\
+标量谱/RM陪集 & Walsh、NL、最近仿射函数、RM1距离证据。\\
+二次型 & 极化秩、根空间、导数核与二次谱条件。\\
+bent构造 & 二次与MM构造、前提证明和全谱核验。\\
+向量指标 & 全非零分量、DDT、最弱分量和最坏方向。\\
+函数生成码 & 秩门、有限重量枚举与NL桥梁。\\
+高阶不变量 & 自相关、CI/韧性、线性结构，小维AI和NL2。\\
+迹与幂搜索 & 固定域模型的Gold/幂候选、显式搜索集合。\\
+EA证书 & 给定EA矩阵/平移逐点验证与目标匹配。\\
+枚举器与界入口 & 精确MacWilliams变换、非负整系数必要条件；非通用LP。\\
+设计与OA & 给定块/行的精确计数及失败见证。\\
+序列相关 & 周期与xor群作用分别定义的自/互相关。\\
+有限域函数 & 多项式、绝对迹、对偶基和坐标恢复。\\
+S-box准则 & 经典置换BCT、DLCT、坐标SAC和全分量PC。\\
+CCZ图证书 & 给定图仿射证书与必要不变量预筛。\\
+完整实验 & 构造到指标、阶段日志、环境指纹、哈希与重算。\\\bottomrule
+\end{longtable}\normalsize
+\section{一条有效研究请求应含哪些条件}
+建议按“问题与目标指标、n/m和表示、构造参数、预算、需要的证明、输出路径”组织请求。例如：在GF(8)明确模多项式11，搜索指数1、3、5，要求置换且差分均匀性2，保存全部候选和失败原因；不把有限候选通过写成新族。
+
+有研究潜力的组合：二次型空间到向量bent再到少重量码和支持集检查；Gold/迹构造到全谱/DDT/BCT后再做证书核验；谱约束到韧性/AI/高阶距离。每条桥梁单独核对前提，保留尚待证明的义务。
+
+\chapter{常见错误、升级与维护}
+\begin{enumerate}
+\item 找不到python：使用实际可用的py -3或解释器完整路径，重新打开终端。不要把安装目录路径直接当成命令。
+\item 找不到SKILL：检查有没有多套一层目录，资源是否完整，宿主是否重新加载；DeepSeek还要确认profile一致。
+\item JSON报错：检查英文双引号、尾逗号、长度、值域和重复键；true不能作为整数。
+\item 输出目录已存在：换新实验目录，保留旧结果。报告文件必须在实验目录外且尚不存在。
+\item 预算不足：先减小问题规模；确需增大时显式调整--max-work，并记录参数，不能用采样冒充精确结论。
+\item 指纹不同但重算匹配：如实报告运行环境变化与数学匹配，保留原环境文件，不改写历史归档。
+\item 已装旧版：Codex使用显式备份升级；DSH按宿主插件管理方式升级后新任务验收。不要在两个发现目录放同名入口。
+\end{enumerate}
+
+\section{作者端：从仓颉源重新编译}
+仓库source保存能力卡与verified.yaml，skills保存冻结运行资源。需要修改技能时，编辑源卡和对应程序/测试，再在仓库根目录、装有PyYAML的Python环境中运行：
+\begin{code}
+python scripts/rebuild_skill.py --cangjie C:\path\to\cangjie-skill
+\end{code}
+生成结果在build/recompiled-skill，不自动覆盖用户安装。该编译动作不等于通过来源验证、数学测试、宿主发现或文献查新，修改后仍应完成相应验收。
+
+\section{TeX怎样编译成PDF}
+两份导出的.tex是完整独立源文件。使用XeLaTeX和CTeX/Fandol字体；在教程目录分别执行两次以更新目录与链接：
+\begin{code}
+xelatex -interaction=nonstopmode -halt-on-error Codex-First-Edition.tex
+xelatex -interaction=nonstopmode -halt-on-error Codex-First-Edition.tex
+xelatex -interaction=nonstopmode -halt-on-error DeepSeek-First-Edition.tex
+xelatex -interaction=nonstopmode -halt-on-error DeepSeek-First-Edition.tex
+\end{code}
+若没有TeX环境，可安装TeX Live，或将独立TeX源上传支持XeLaTeX的编辑器并选择XeLaTeX编译器。修改后要看编译日志并渲染检查分页、命令和中文，不只检查PDF文件存在。
+
+\section{后续GitHub上传继续沿用的流程}
+先读AGENTS.md和docs/UPLOAD\_WORKFLOW.md，核对远端main；只提交本次源码、测试、范例、TeX与最终手册PDF，保留他人改动。排除build/dist、缓存、私人材料和凭据。完成数学/安装器/适配器测试、文档链接检查与PDF编译检查；上传后核对提交SHA和CI。版本化安装包、源码ZIP、校验文件作为Release资产发布并验收下载。本项目未新增LICENSE。
+
+\chapter{验收清单与来源}
+\begin{enumerate}
+\item 仓颉已加载，完整SKILL与资源可定位；doctor实际运行，或明确未运行原因。
+\item 对应平台的第一版安装正确，版本信息与EDITION清单相符。
+\item 二次bent基准与GF(8)立方基准得到预期数值。
+\item 实验输入、完整表、全分量指标、环境、日志及清单保存在工作目录。
+\item 审计状态、退出码、未计算项和失败见证均已查看；重算与哈希状态分别解释。
+\item 论文结论另给全参数条件证明；新颖性另做原始文献查新，不以本教程有限算例代替。
+\end{enumerate}
+
+项目：\url{https://github.com/WEveboy/The-Theory-of-Error-Correcting-Codes-skill}。
+仓颉：\url{https://github.com/kangarooking/cangjie-skill}。
+Codex技能文档：\url{https://learn.chatgpt.com/docs/build-skills}。
+DeepSeek Harness：\url{https://github.com/deepseek-ai/deepseek-harness}。
+DSH本次锁定版本的官方npm元数据：\url{https://registry.npmjs.org/@deepseek-ai/dsh/0.2.1-rc.2}。
+
+研究中的B（原书）、D（独立推导）、E（现代来源）、H（研究假设）分别标注。原书重点章节和来源核读范围见Skill内proof\_ledger与overview；不宣称逐页逐题完成全书验证。
+\end{document}
+
